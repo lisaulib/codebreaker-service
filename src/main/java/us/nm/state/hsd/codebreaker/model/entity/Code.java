@@ -31,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.sun.el.stream.Optional;
 import us.nm.state.hsd.codebreaker.cofiguration.Beans;
 import us.nm.state.hsd.codebreaker.service.UUIDStringifier;
 
@@ -138,6 +139,18 @@ public class Code {
         : null;
   }
   
+  public boolean isSolved() {
+    return guesses
+        .stream()
+        .anyMatch((guess) -> guess.isSolution());
+    //or can say ".anyMatch(Guess::isSolution);"
+  }
+  
+  @JsonProperty("text")
+  public String getSolution() {
+    return isSolved() ? text : null;
+  
+  }
   @PostLoad
   @PostPersist
   private void updateKey() {
@@ -146,5 +159,5 @@ public class Code {
     
   }
   
+  }
   
-}
